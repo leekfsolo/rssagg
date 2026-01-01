@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
@@ -35,9 +36,12 @@ func main() {
 		log.Fatal("failed to open database connection")
 	}
 
+	db := database.New(conn)
 	apiConfig := apiConfig{
-		DB: database.New(conn),
+		DB: db,
 	}
+
+	go startScraping(db, 10, time.Minute)
 
 	router := chi.NewRouter()
 	router.Use(cors.Handler(cors.Options{
@@ -54,7 +58,7 @@ func main() {
 	v1Router.Get("/error", handlerError)
 	v1Router.Post("/users", apiConfig.handlerCreateUser)
 	v1Router.Get("/users", apiConfig.middlewareAuth(apiConfig.handlerGetUser))
-	
+
 	v1Router.Post("/feeds", apiConfig.middlewareAuth(apiConfig.handlerCreateFeed))
 	v1Router.Get("/feeds", apiConfig.handlerGetFeeds)
 
@@ -66,7 +70,7 @@ func main() {
 
 	server := &http.Server{
 		Handler: router,
-		Addr: ":" + portString,
+		Addr:    ":" + portString,
 	}
 
 	log.Printf("Server running on port %s", portString)

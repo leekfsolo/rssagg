@@ -8,7 +8,7 @@ import (
 	"github.com/leekfsolo/rssagg/internal/database"
 )
 
-type authedHandler func(w http.ResponseWriter, r *http.Request, user database.User) 
+type authedHandler func(w http.ResponseWriter, r *http.Request, user database.User)
 
 func (apiConfig *apiConfig) middlewareAuth(handler authedHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -16,13 +16,13 @@ func (apiConfig *apiConfig) middlewareAuth(handler authedHandler) http.HandlerFu
 		if err != nil {
 			respondWithError(w, 403, fmt.Sprintf("Auth error: %v", err))
 			return
-		}	
+		}
 
 		user, err := apiConfig.DB.GetUserByAPIKey(r.Context(), apiKey)
 		if err != nil {
 			respondWithError(w, 400, fmt.Sprintf("Could not get user: %v", err))
 			return
-		}	
+		}
 
 		handler(w, r, user)
 	}

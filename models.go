@@ -22,7 +22,7 @@ func TransformUserToUser(user database.User) User {
 		UpdatedAt: user.UpdatedAt,
 		Name:      user.Name,
 		APIKey:    user.ApiKey,
-	}	
+	}
 }
 
 type Feed struct {
@@ -42,7 +42,7 @@ func TransformFeedToFeed(feed database.Feed) Feed {
 		Name:      feed.Name,
 		Url:       feed.Url,
 		UserID:    feed.UserID,
-	}		
+	}
 }
 
 func TransformFeedsToFeeds(feeds []database.Feed) []Feed {
@@ -68,7 +68,7 @@ func TransformFeedFollowToFeedFollow(feedFollow database.FeedFollow) FeedFollow 
 		UpdatedAt: feedFollow.UpdatedAt,
 		UserID:    feedFollow.UserID,
 		FeedID:    feedFollow.FeedID,
-	}		
+	}
 }
 
 func TransformFeedFollowsToFeedFollows(feedFollows []database.FeedFollow) []FeedFollow {
