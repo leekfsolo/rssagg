@@ -38,3 +38,13 @@ func (apiConfig *apiConfig) handlerCreateFeed(w http.ResponseWriter, r *http.Req
 
 	respondWithJSON(w, 201, TransformFeedToFeed(feed))	
 }
+
+func (apiConfig *apiConfig) handlerGetFeeds(w http.ResponseWriter, r *http.Request) {
+	feeds, err := apiConfig.DB.GetFeeds(r.Context())
+	if err != nil {
+		respondWithError(w, 400, fmt.Sprintf("Something went wrong: %v", err))
+		return
+	}
+
+	respondWithJSON(w, 200, TransformFeedsToFeeds(feeds))	
+}
